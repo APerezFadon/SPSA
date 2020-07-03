@@ -48,7 +48,7 @@ def SPSA(f, theta, n_iter, extra_params = False, theta_min = None, theta_max = N
 		theta_plus = theta + ck * delta
 		theta_minus = theta - ck * delta
 
-		if extra_params == False:
+		if extra_params is False:
 			y_plus = f(*theta_plus)
 			y_minus = f(*theta_minus)
 		else:
@@ -63,10 +63,12 @@ def SPSA(f, theta, n_iter, extra_params = False, theta_min = None, theta_max = N
 
 		# Make sure theta is within the boundaries
 		if theta_min is not None:
-			theta = max(theta, theta_min)
+			index_min = np.where(theta < theta_min)
+			theta[index_min] = theta_min[index_min]
 
 		if theta_max is not None:
-			theta = min(theta, theta_max)
+			index_max = np.where(theta > theta_max)
+			theta[index_max] = theta_max[index_max]
 
 		# Report progress
 		if report:
@@ -81,5 +83,6 @@ def SPSA(f, theta, n_iter, extra_params = False, theta_min = None, theta_max = N
 
 if __name__ == "__main__":
 	# Test it works
-	f = lambda x, y, z: x**2 + y**2 + z**2
-	print(SPSA(f, np.array([2, 3, -1]), 1000, report = 5))
+	f = lambda x, y, z, w, m: x**2 + y**2 + z**2
+	print(SPSA(f, np.array([2, 3, 1]), 1000, report = 5, extra_params = np.array(["Extra parameter", 
+		"Another parameter"]), theta_min = np.array([0.5, 0.4, 0.3])))
