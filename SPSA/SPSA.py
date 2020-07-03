@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 # For information about the algorithm, visit:
 # https://www.jhuapl.edu/SPSA/PDF-SPSA/Spall_An_Overview.PDF
@@ -8,7 +9,7 @@ constats = {"alpha": 0.602, "gamma": 0.101, "a": 0.2, "c": 0.2, "A": False}
 
 # Main minimising function
 def SPSA(f, theta, n_iter, extra_params = False, theta_min = None, theta_max = None, 
-	report = False, constats = constats):
+	report = False, constats = constats, return_progress = False):
 	
 	# Parameters:
 	# 	f: Function to be minimised (func)
@@ -21,9 +22,12 @@ def SPSA(f, theta, n_iter, extra_params = False, theta_min = None, theta_max = N
 	# 		report iterations you will get the iteration number, function 
 	# 		value and parameter values.
 	# 	constats: Constants needed for the gradient descent (dict)
+	#	return_progress: Return array with all the function values at each itearion (bool)
 
 	# Returns:
 	# 	theta: Optimum parameters values to minimise f (np.array)
+	#	If return_progress == True:
+	#		progress: Array with all the function values at each itearion (np.array)
 
 	# Get value of p from paramters
 	p = len(theta)
@@ -37,6 +41,9 @@ def SPSA(f, theta, n_iter, extra_params = False, theta_min = None, theta_max = N
 
 	if A == False:
 		A = n_iter / 10
+
+	if return_progress:
+		progress = np.array([])
 
 	# Carry out the iterations
 	for k in range(1, n_iter + 1):
@@ -70,6 +77,12 @@ def SPSA(f, theta, n_iter, extra_params = False, theta_min = None, theta_max = N
 			index_max = np.where(theta > theta_max)
 			theta[index_max] = theta_max[index_max]
 
+		if return_progress:
+			if extra_params is False:
+				progress = np.append(progress, f(*theta))
+			else:
+				progress = np.append(progress, f(*theta, *extra_params))
+
 		# Report progress
 		if report:
 			if k % report == 0:
@@ -79,7 +92,31 @@ def SPSA(f, theta, n_iter, extra_params = False, theta_min = None, theta_max = N
 					print(f"Iteration: {k}\tArguments: {theta}\tFunction value: {f(*theta, *extra_params)}")
 
 	# Return optimum value
-	return theta
+	if not return_progress:
+		return theta
+	else:
+		return theta, progress
+
+
+# Plot the second return value of SPSA
+def plot_progress(progress, title = False, xlabel = False, ylabel = False, save = False):
+	plt.plot(progress, color = "#e100ff")
+	if xlabel:
+		plt.xlabel(xlabel)
+	if ylabel:
+		plt.ylabel(ylabel)
+	if title:
+		plt.title(title)
+	fig_size = plt.rcParams["figure.figsize"]
+	fig_size[0] = 8
+	fig_size[1] = 6
+	plt.rcParams["figure.figsize"] = fig_size
+	plt.grid(b = True, which = "major", linestyle = "-")
+	plt.minorticks_on()
+	plt.grid(b = True, which = "minor", color = "#999999", linestyle = "-", alpha = 0.2)
+	if save:
+		plt.savefig(save)
+	plt.show()
 
 if __name__ == "__main__":
 	# Test it works
