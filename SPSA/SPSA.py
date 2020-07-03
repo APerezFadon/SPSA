@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 # https://www.jhuapl.edu/SPSA/PDF-SPSA/Spall_An_Overview.PDF
 
 # Consatants to be used for the gradient descent
-constats = {"alpha": 0.602, "gamma": 0.101, "a": 0.1, "c": 0.1, "A": False}
+constats = {"alpha": 0.602, "gamma": 0.101, "a": 0.6283185307179586, "c": 0.1, "A": False}
 
 # Main minimising function
 def SPSA(f, theta, n_iter, extra_params = False, theta_min = None, theta_max = None, 
