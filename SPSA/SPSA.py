@@ -40,7 +40,7 @@ def SPSA(f, theta, n_iter, extra_params = False, theta_min = None, theta_max = N
 	A = constats["A"]
 
 	if A == False:
-		A = n_iter / 10
+		A = n_iter / 20
 
 	if return_progress:
 		progress = np.array([])
