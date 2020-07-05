@@ -1,5 +1,5 @@
 # Simultaneous Perturbation Stochastic Approximation (SPSA)
-Python implementation of the SPSA algorithm. This is a minimisation algorithm based on gradient descent. The advantage of SPSA is that the complexity does not scale too much with number of parameters, as only two function evaluations are required per iteration regardless of the number of variables.
+Python implementation of the SPSA algorithm [1]. This is a minimisation algorithm based on gradient descent. The advantage of SPSA is that the complexity does not scale too much with number of parameters, as only two function evaluations are required per iteration regardless of the number of variables. It has also been shown to improve the training time of neural networks in crtain cases, by substituting backpropagation for SPSA [2].
 
 # Documentation
 SPSA(f, theta, n_iter, extra_params = False, theta_min = None, theta_max = None, report = False, constats = constats, return_progress = False)
@@ -31,5 +31,6 @@ plot_progress(progress, title = False, xlabel = False, ylabel = False, save = Fa
 - Plots the function value against iteration number
 
 # References
-Spall, J. C. An Overview of the Simultaneous Perturbation Method
-for Efficient Optimization. Johns Hopkins APL Technical Digest. 1998; 4 (19): 482-492.
+[1] Spall, J. C. An Overview of the Simultaneous Perturbation Method
+for Efficient Optimization. Johns Hopkins APL Technical Digest. 1998; 4 (19): 482-492.  
+[2] Wulff, Benjamin & Schücker, Jannis & Bauckhage, Christian. (2018). SPSA for Layer-Wise Training of Deep Networks. 10.1007/978-3-030-01424-7_55. 
