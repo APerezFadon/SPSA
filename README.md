@@ -3,10 +3,10 @@ Python implementation of the SPSA algorithm. This is a minimisation algorithm ba
 
 # Documentation
 SPSA(f, theta, n_iter, extra_params = False, theta_min = None, theta_max = None, report = False, constats = constats, return_progress = False)
-	- Parameters:
-		- f: Function to be minimised (func)
-		- theta: Initial parameter guess (np.array)
-		- n_iter: Number of iterations (int)
+- Parameters:
+  - f: Function to be minimised (func)
+  - theta: Initial parameter guess (np.array)
+  - n_iter: Number of iterations (int)
 		- extra_params: Extra parameters taken by f (np.array)
 		- theta_min: Minimum value of theta (np.array)
 		- theta_max: Maximum value of theta (np.array)
