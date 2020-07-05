@@ -18,8 +18,8 @@ SPSA(f, theta, n_iter, extra_params = False, theta_min = None, theta_max = None,
   - f(theta): Minimum value found (float)
   - If return_progress == True:
     - progress: Array with all the function values at each return_progress iteration (np.array)
-- Carries out the SPSA algorithm  
-
+- Carries out the SPSA algorithm
+  
 plot_progress(progress, title = False, xlabel = False, ylabel = False, save = False)
 - Parameters:
   - progress: Third output from SPSA (np.array)
