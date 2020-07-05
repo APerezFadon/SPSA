@@ -20,14 +20,15 @@ def SPSA(f, theta, n_iter, extra_params = False, theta_min = None, theta_max = N
 	# 	theta_max: Maximum value of theta (np.array)
 	# 	report: Print progress. If False, nothing is printed. If int, every
 	# 		report iterations you will get the iteration number, function 
-	# 		value and parameter values.
+	# 		value and parameter values (bool / int)
 	# 	constats: Constants needed for the gradient descent (dict)
-	#	return_progress: Return array with all the function values at each itearion (bool)
+	#	return_progress: Return array with all the function values at every return_progress iteration (bool / int)
 
 	# Returns:
 	# 	theta: Optimum parameters values to minimise f (np.array)
+	#	f(theta): Minimum value found (float)
 	#	If return_progress == True:
-	#		progress: Array with all the function values at each itearion (np.array)
+	#		progress: Array with all the function values at each return_progress iteration (np.array)
 
 	# Get value of p from paramters
 	p = len(theta)
@@ -40,10 +41,13 @@ def SPSA(f, theta, n_iter, extra_params = False, theta_min = None, theta_max = N
 	A = constats["A"]
 
 	if A == False:
-		A = n_iter / 20
+		A = n_iter / 10
 
 	if return_progress:
-		progress = np.array([])
+		if extra_params is False:
+			progress = np.array([[0, f(*theta)]])
+		else:
+			progress = np.array([[0, f(*theta, *extra_params)]])			
 
 	# Carry out the iterations
 	for k in range(1, n_iter + 1):
@@ -77,11 +81,13 @@ def SPSA(f, theta, n_iter, extra_params = False, theta_min = None, theta_max = N
 			index_max = np.where(theta > theta_max)
 			theta[index_max] = theta_max[index_max]
 
+		# Track progress
 		if return_progress:
-			if extra_params is False:
-				progress = np.append(progress, f(*theta))
-			else:
-				progress = np.append(progress, f(*theta, *extra_params))
+			if k % return_progress == 0:
+				if extra_params is False:
+					progress = np.concatenate((progress, np.array([[k, f(*theta)]])))
+				else:
+					progress = np.concatenate((progress, np.array([[k, f(*theta, *extra_params)]])))
 
 		# Report progress
 		if report:
@@ -93,14 +99,26 @@ def SPSA(f, theta, n_iter, extra_params = False, theta_min = None, theta_max = N
 
 	# Return optimum value
 	if not return_progress:
-		return theta
+		if extra_params is False:
+			return theta, f(*theta)
+		else:
+			return theta, f(*theta, *extra_params)
 	else:
-		return theta, progress
+		if extra_params is False:
+			return theta, f(*theta), progress
+		else:
+			return theta, f(*theta, *extra_params), progress
 
 
-# Plot the second return value of SPSA
+# Plot the progress of SPSA (I know, very useful comment :) )
 def plot_progress(progress, title = False, xlabel = False, ylabel = False, save = False):
-	plt.plot(progress, color = "#e100ff")
+	# Parameters:
+	# 	progress: Third output from SPSA (np.array)
+	# 	title: Graph title (str)
+	# 	xlabel: Label for the x axis. Use r"$$" for latex formatting (str)
+	# 	ylabel: Label for the y axis. Use r"$$" for latex formatting (str)
+	# 	save: If not False, save the graph with the name given (bool / str)
+	plt.plot(progress[:, 0], progress[:, 1], color = "#e100ff")
 	if xlabel:
 		plt.xlabel(xlabel)
 	if ylabel:
@@ -119,7 +137,12 @@ def plot_progress(progress, title = False, xlabel = False, ylabel = False, save 
 	plt.show()
 
 if __name__ == "__main__":
-	# Test it works
 	f = lambda x, y, z, w, m: x**2 + y**2 + z**2
-	print(SPSA(f, np.array([2, 3, 1]), 1000, report = 5, extra_params = np.array(["Extra parameter", 
-		"Another parameter"]), theta_min = np.array([0.5, 0.4, 0.3])))
+
+	params, minimum, progress = SPSA(f, np.array([2, 3, 1]), 1000, report = 5, extra_params = np.array(["Extra parameter", 
+		"Another parameter"]), theta_min = np.array([0.5, 0.4, 0.3]), return_progress = 5)
+
+	print(f"The parameters that minimise the function are {params}\nThe minimum value of f is: {minimum}")
+
+	plot_progress(progress, title = "SPSA", xlabel = r"Iteration", ylabel = r"x$^{2}$ + y$^{2}$ + z$^{2}$")
+
