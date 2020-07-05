@@ -22,13 +22,14 @@ def SPSA(f, theta, n_iter, extra_params = False, theta_min = None, theta_max = N
 	# 		report iterations you will get the iteration number, function 
 	# 		value and parameter values (bool / int)
 	# 	constats: Constants needed for the gradient descent (dict)
-	#	return_progress: Return array with all the function values at every return_progress iteration (bool / int)
+	#		default is {"alpha": 0.602, "gamma": 0.101, "a": 0.6283185307179586, "c": 0.1, "A": False}
+	# 	return_progress: Return array with all the function values at every return_progress iteration (bool / int)
 
 	# Returns:
 	# 	theta: Optimum parameters values to minimise f (np.array)
-	#	f(theta): Minimum value found (float)
-	#	If return_progress == True:
-	#		progress: Array with all the function values at each return_progress iteration (np.array)
+	# 	f(theta): Minimum value found (float)
+	# 	If return_progress == True:
+	# 		progress: Array with all the function values at each return_progress iteration (np.array)
 
 	# Get value of p from paramters
 	p = len(theta)
