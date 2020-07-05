@@ -1,5 +1,5 @@
 # Simultaneous Perturbation Stochastic Approximation (SPSA)
-Python implementation of the SPSA algorithm. This is a minimisation algorithm based on gradient descent. The advantage of SPSA is that the complexity does not scale too much with number of parameters.
+Python implementation of the SPSA algorithm. This is a minimisation algorithm based on gradient descent. The advantage of SPSA is that the complexity does not scale too much with number of parameters, as only two function evaluations are required per iteration regardless of the number of variables.
 
 # Documentation
 SPSA(f, theta, n_iter, extra_params = False, theta_min = None, theta_max = None, report = False, constats = constats, return_progress = False)
