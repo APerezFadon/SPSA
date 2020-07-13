@@ -1,1 +1,1 @@
-from .SPSA import SPSA, plot_progress
+from .SPSA import *
