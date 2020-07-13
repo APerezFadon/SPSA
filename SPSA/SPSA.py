@@ -93,7 +93,7 @@ def SPSA(f, theta, n_iter, extra_params = False, theta_min = None, theta_max = N
 		# Report progress
 		if report:
 			if k % report == 0:
-				if extra_params == False:
+				if extra_params is False:
 					print(f"Iteration: {k}\tArguments: {theta}\tFunction value: {f(*theta)}")
 				else:
 					print(f"Iteration: {k}\tArguments: {theta}\tFunction value: {f(*theta, *extra_params)}")
@@ -110,15 +110,22 @@ def SPSA(f, theta, n_iter, extra_params = False, theta_min = None, theta_max = N
 		else:
 			return theta, f(*theta, *extra_params), progress
 
+def moving_aver(arr, n, axis = None):
+	cum = np.cumsum(arr, axis = axis)
+	cum[n:] = cum[n:] - cum[: -n]
+	return cum[n - 1:] / n
 
 # Plot the progress of SPSA (I know, very useful comment :) )
-def plot_progress(progress, title = False, xlabel = False, ylabel = False, save = False):
+def plot_progress(progress, title = False, xlabel = False, ylabel = False, moving_average = False, save = False):
 	# Parameters:
 	# 	progress: Third output from SPSA (np.array)
 	# 	title: Graph title (str)
 	# 	xlabel: Label for the x axis. Use r"$$" for latex formatting (str)
 	# 	ylabel: Label for the y axis. Use r"$$" for latex formatting (str)
+	#	moving_average: If not False, plot the moving average with the specified n (bool / int)
 	# 	save: If not False, save the graph with the name given (bool / str)
+	if moving_average is not False:
+		progress = moving_aver(progress, moving_average, axis = 0)
 	plt.plot(progress[:, 0], progress[:, 1], color = "#e100ff")
 	if xlabel:
 		plt.xlabel(xlabel)
@@ -140,10 +147,13 @@ def plot_progress(progress, title = False, xlabel = False, ylabel = False, save 
 if __name__ == "__main__":
 	f = lambda x, y, z, w, m: x**2 + y**2 + z**2
 
-	params, minimum, progress = SPSA(f, np.array([2, 3, 1]), 1000, report = 5, extra_params = np.array(["Extra parameter", 
+	params, minimum, progress = SPSA(f, np.array([2, 3, 1]), 100, report = 5, extra_params = np.array(["Extra parameter", 
 		"Another parameter"]), theta_min = np.array([0.5, 0.4, 0.3]), return_progress = 5)
 
 	print(f"The parameters that minimise the function are {params}\nThe minimum value of f is: {minimum}")
 
 	plot_progress(progress, title = "SPSA", xlabel = r"Iteration", ylabel = r"x$^{2}$ + y$^{2}$ + z$^{2}$")
+
+	plot_progress(progress, title = "SPSA", xlabel = r"Iteration", ylabel = r"x$^{2}$ + y$^{2}$ + z$^{2}$", 
+		moving_average = 5)
 

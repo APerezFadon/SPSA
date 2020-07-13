@@ -21,7 +21,7 @@ print(f"The parameters that minimise the function are {params}\nThe minimum valu
 
 # Plot the progress. Paramters and return values are explained in SPSA.py
 plot_progress(progress, title = "Plot", xlabel = r"Iteration", 
-	ylabel = r"x$^{2}$ + y$^{2}$ + z$^{2}$", save = "exmaple.png")
+	ylabel = r"x$^{2}$ + y$^{2}$ + z$^{2}$", moving_average = 5, save = "exmaple.png")
 
 # NOTE: To run this example, the SPSA package must be in the same directory as your script, or in a folder
 # incuded in your PATH variable.
