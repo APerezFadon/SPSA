@@ -9,7 +9,7 @@ constats = {"alpha": 0.602, "gamma": 0.101, "a": 0.6283185307179586, "c": 0.1, "
 
 # Main minimising function
 def SPSA(f, theta, n_iter, extra_params = False, theta_min = None, theta_max = None, 
-	report = False, constats = constats, return_progress = False):
+	report = False, constats = constats, return_progress = False, threshold = None):
 	
 	# Parameters:
 	# 	f: Function to be minimised (func)
@@ -97,6 +97,24 @@ def SPSA(f, theta, n_iter, extra_params = False, theta_min = None, theta_max = N
 					print(f"Iteration: {k}\tArguments: {theta}\tFunction value: {f(*theta)}")
 				else:
 					print(f"Iteration: {k}\tArguments: {theta}\tFunction value: {f(*theta, *extra_params)}")
+
+		# Check if f is lower than the threshold
+		if threshold is not None:
+			if extra_params is False:
+				val = f(*theta)
+			else:
+				val = f(*theta, *extra_params)
+			if val <= threshold:
+				if not return_progress:
+					if extra_params is False:
+						return theta, f(*theta)
+					else:
+						return theta, f(*theta, *extra_params)
+				else:
+					if extra_params is False:
+						return theta, f(*theta), progress
+					else:
+						return theta, f(*theta, *extra_params), progress
 
 	# Return optimum value
 	if not return_progress:
